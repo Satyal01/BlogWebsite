@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <%- include("./partials/header") %>
+</head>
+<body>
+    <%- include("./partials/navbar") %>
+
+    <div class="container text-center mt-4">
+        <div class="mt-4">
+            <img src="http://localhost:8000/<%=data.blogData.coverImageUrl %>" style="height: 400px;" class="rounded mx-auto h-{10} " alt="...">
+        </div>
+        <div class="mt-4">
+            <h1 class="underline"><%= data.blogData.title %></h1>
+        </div>
+
+        <div class="mt-4">
+            <p class="lead"><%= data.blogData.content %></p>
+        </div>
+        <p class="text-end blockquot-footer">
+            <div class=" text-end ">
+                <% const writerImg = "http://localhost:8000"+data.blogData.createdBy.profileImage %>
+                <img class="rounded " style="height: 2rem;" src="<%= writerImg %>" alt="...">
+                <%= data.blogData.createdBy.name %>
+            </div>
+        </p>
+        <hr>
+    </div>
+    <h2 class="container">comments(<%=data.commentData.length || 0  %>)</h2>
+    <%if(locals.data.user){ %>
+        <div class="container">
+            <form action="/blog/comment/<%= data.blogData._id %>" method="post">
+                <label for="commment" class="form-label">Comment..</label>
+                <input type="text" class="form-control" id="comment" name="content" >
+                <button type="submit" class="btn btn-primary mt-2">comment</button>
+            </form>
+        </div>
+    <%} %>
+        <% if(data.commentData){ %>
+            <div class="container">
+        <ul class="list-group mt-1 mb-4">
+            <% data.commentData.map((cmt)=>{ %>
+                
+                <li class="list-group-item mt-2" style="height: 3.2rem; display: flex; justify-content: center;">
+                    <p class="card-body"><%= cmt.content %> </p>
+                    <img class="text-end rounded" src="http://localhost:8000/<%= cmt.createdBy?.profileImage %>" alt="...." height="25" width="25">
+                    <p class="blockquot-footer">-<%= cmt.createdBy.name %></p>
+                </div>
+                <% })  %> 
+        </ul>
+        
+    </div>
+    <% } %>
+    <%- include("./partials/footer") %>
+</body>
+</html>
